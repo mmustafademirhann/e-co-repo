@@ -28,7 +28,7 @@ const HomePage = () => {
       <Carousel images={carouselImages} />
 
       {/* Diğer içerikler ortalı ve sınırlı */}
-      <div className="max-w-7xl mx-auto px-4">
+      <div className=" px-4">
         {/* Kategoriler */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-8">
           {["Kadın", "Erkek", "Çocuk", "Aksesuar"].map((category) => (

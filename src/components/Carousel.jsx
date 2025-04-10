@@ -6,7 +6,8 @@ const Carousel = ({ images }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
+      setCurrent((prev) =>{
+        return (prev + 1) % images.length} );
     }, 5000);
     return () => clearInterval(timer);
   }, [images.length]);
@@ -35,9 +36,7 @@ const Carousel = ({ images }) => {
 
       {/* Oklar */}
       <button
-        onClick={() =>
-          setCurrent((prev) => (prev - 1 + images.length) % images.length)
-        }
+        onClick = {() => setCurrent((prev) => (prev - 1 + images.length) % images.length)}
         className="absolute left-[40px] top-1/2 transform -translate-y-1/2 z-20"
       >
         <ChevronLeft className="w-6 h-[44px] text-white" strokeWidth={1.5} />
