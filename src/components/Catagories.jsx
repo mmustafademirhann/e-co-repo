@@ -8,6 +8,7 @@ const Catagories = ({categories}) => {
                 src={category.src}
                 alt={category.title}
                 className="w-full h-[400px] object-cover"
+                
               />
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-6 py-2 shadow text-black text-sm font-semibold tracking-wider uppercase">
                 {category.title}

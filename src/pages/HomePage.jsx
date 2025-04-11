@@ -2,7 +2,7 @@ import Carousel from '../components/Carousel';
 import Catagories from '../components/Catagories';
 import {Products} from '../components/Products';
 import HeroSection from '../layout/HeroSection';
-import {carouselImages,categories,productsImages,heroData,mockPosts}from '../data.js'
+import {carouselImages,categories,productsImages,heroData}from '../data.js'
 import FeaturedPosts from '../layout/FeaturedPosts';
 
 
