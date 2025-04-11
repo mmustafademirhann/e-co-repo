@@ -41,7 +41,7 @@ const Carousel = ({ images }) => {
       >
         <ChevronLeft className="w-6 h-[44px] text-white" strokeWidth={1.5} />
       </button>
-      <button
+      <button  
         onClick={() => setCurrent((prev) => (prev + 1) % images.length)}
         className="absolute right-[40px] top-1/2 transform -translate-y-1/2 z-20"
       >
