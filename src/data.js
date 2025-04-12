@@ -1,18 +1,18 @@
 export const carouselImages = [
     {
-      src: "https://picsum.photos/id/1012/1600/753",
+      src: "/src/assets/kari1.png",
       alt: "Yeni Ürünler",
       caption: "Yeni Koleksiyon",
       description: "2025 için en yeni teknoloji ürünlerimiz"
     },
     {
-      src: "https://picsum.photos/id/18/1600/753",
+      src: "/src/assets/kari1.png",
       alt: "İndirimli Ürünler",
       caption: "Büyük İndirim",
       description: "Seçili ürünlerde %50'ye varan indirimler"
     },
     {
-      src: "https://picsum.photos/id/118/1600/753",
+      src: "/src/assets/kari1.png",
       alt: "Premium Ürünler",
       caption: "Premium Serisi",
       description: "En kaliteli ve lüks ürünlerimiz"
@@ -22,7 +22,7 @@ export const carouselImages = [
     {
       id: 1,
       title: "Kadın",
-      src: "https://picsum.photos/id/1012/400/400"
+      src: "/src/assets/afgn.png"
     },
     {
       id: 2,
