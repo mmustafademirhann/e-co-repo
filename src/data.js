@@ -18,26 +18,30 @@ export const carouselImages = [
       description: "En kaliteli ve lüks ürünlerimiz"
     }
   ];
- export const categories = [
+  export const categories = [
     {
       id: 1,
       title: "Kadın",
-      src: "/src/assets/afgn.png"
+      src: "/src/assets/kari1.png",
+      layoutSlot: "women" // Tam olarak "women" mu?
     },
     {
       id: 2,
       title: "Erkek",
-      src: "https://picsum.photos/id/1015/400/400"
+      src: "/src/assets/afgn.png",
+      layoutSlot: "men" // Tam olarak "men" mu?
     },
     {
       id: 3,
       title: "Çocuk",
-      src: "https://picsum.photos/id/1020/400/400"
+      src: "/src/assets/ksin.png",
+      layoutSlot: "kids" // Tam olarak "kids" mu?
     },
     {
       id: 4,
       title: "Aksesuar",
-      src: "https://picsum.photos/id/1035/400/400"
+      src: "/src/assets/kzn.png",
+      layoutSlot: "accessories" // Tam olarak "accessories" mu?
     }
   ];
   export const productsImages = [
