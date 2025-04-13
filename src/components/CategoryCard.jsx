@@ -2,6 +2,7 @@ import React from 'react';
 
 // Yeniden Kullanılabilir Kategori Kartı Bileşeni
 const CategoryCard = ({ category, className = "", imgClassName = "" }) => (
+    
     <div className={`relative cursor-pointer overflow-hidden group ${className}`}>
         {/* Kategori verisi varsa resmi göster */}
         {category?.src && category?.title && (
@@ -18,6 +19,7 @@ const CategoryCard = ({ category, className = "", imgClassName = "" }) => (
             {category?.title || 'Kategori'}
         </div>
     </div>
+    
 );
 
 export default CategoryCard

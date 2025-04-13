@@ -18,9 +18,9 @@ const Categories = ({ categories }) => {
   }
 
   return (
-    <div className="mb-8 mt-8">
+    <div className="mb-8 mt-10">
       {/* Mobil görünüm için ayrı konteyner - küçük ekranlarda görünür */}
-      <div className="flex flex-col gap-1 md:hidden">
+      <div className="flex flex-col gap-6 md:hidden">
         {/* MEN - tam genişlik, dikey kartlı görünüm */}
         <div className="aspect-[3/4] w-full">
           <CategoryCard
@@ -40,7 +40,7 @@ const Categories = ({ categories }) => {
         </div>
         
         {/* ACCESSORIES - tam genişlik, dikey kartlı görünüm */}
-        <div className="aspect-[3/3.5] w-full">
+        <div className="aspect-[3/2] w-full">
           <CategoryCard
             category={accessoriesCategory}
             className="h-full"
@@ -49,7 +49,7 @@ const Categories = ({ categories }) => {
         </div>
         
         {/* KIDS - tam genişlik, dikey kartlı görünüm */}
-        <div className="aspect-[3/4] w-full">
+        <div className="aspect-[3/2] w-full">
           <CategoryCard
             category={kidsCategory}
             className="h-full"
@@ -90,7 +90,7 @@ const Categories = ({ categories }) => {
           </div>
 
           {/* ÇOCUK - Sağ alt */}
-          <div className="md:h-[220px]">
+          <div className="md:h-[216px]">
             <CategoryCard
               category={kidsCategory}
               className="h-full"
