@@ -6,13 +6,13 @@ export const carouselImages = [
       description: "2025 için en yeni teknoloji ürünlerimiz"
     },
     {
-      src: "/src/assets/ben.jpg",
+      src: "/src/assets/kari1.png",
       alt: "İndirimli Ürünler",
       caption: "Büyük İndirim",
       description: "Seçili ürünlerde %50'ye varan indirimler"
     },
     {
-      src: "/src/assets/ben.jpg",
+      src: "/src/assets/kari1.png",
       alt: "Premium Ürünler",
       caption: "Premium Serisi",
       description: "En kaliteli ve lüks ürünlerimiz"
