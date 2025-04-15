@@ -1,4 +1,4 @@
-import { Products } from "../components/Products";
+import { Product } from "../components/Product";
 
 export const ProductLayout = ({ p }) => {
   return (
@@ -8,7 +8,7 @@ export const ProductLayout = ({ p }) => {
       <p className="text-sm text-gray-500 mb-8">
         Problems trying to resolve the conflict between
       </p>
-      <Products products={p} />
+      <Product products={p} />
     </div>
   );
 };

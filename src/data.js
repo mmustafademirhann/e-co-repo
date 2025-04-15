@@ -110,3 +110,136 @@ export const carouselImages = [
       comments: 10,
     },
   ];
+  export const productsForShopPage = [
+    {
+      id: 1,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product1/300/400'
+    },
+    {
+      id: 2,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product2/300/400'
+    },
+    {
+      id: 3,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product3/300/400'
+    },
+    {
+      id: 4,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product4/300/400'
+    },
+    {
+      id: 5,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product5/300/400'
+    },
+    {
+      id: 6,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product6/300/400'
+    },
+    {
+      id: 7,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product7/300/400'
+    },
+    {
+      id: 8,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product8/300/400'
+    },
+    {
+      id: 9,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product9/300/400'
+    },
+    {
+      id: 10,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product10/300/400'
+    },
+    {
+      id: 11,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product11/300/400'
+    },
+    {
+      id: 12,
+      title: 'Graphic Design',
+      price: 16.48,
+      description: 'English Department',
+      src: 'https://picsum.photos/seed/product12/300/400'
+    }
+  ]
+
+  export const categoriesForShopPage = [
+    { id: 1, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes1/200/250' },
+    { id: 2, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes2/200/250' },
+    { id: 3, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes3/200/250' },
+    { id: 4, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes4/200/250' },
+    { id: 5, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes5/200/250' }
+  ]
+  
+  export const partnersForShopPage = [
+    { id: 1, image: 'https://picsum.photos/seed/partner1/150/50', alt: 'Hooli' },
+    { id: 2, image: 'https://picsum.photos/seed/partner2/150/50', alt: 'Lyft' },
+    { id: 3, image: 'https://picsum.photos/seed/partner3/150/50', alt: 'Stripe' },
+    { id: 4, image: 'https://picsum.photos/seed/partner4/150/50', alt: 'AWS' },
+    { id: 5, image: 'https://picsum.photos/seed/partner5/150/50', alt: 'Reddit' }
+  ]
+ export const contactLocations = [
+    {
+      city: 'Paris',
+      address: '1901 Thorn ridge Cir.',
+      zip: '75000 Paris',
+      phone: '+451 215 215',
+      fax: '+451 215 215'
+    },
+    {
+      city: 'Berlin',
+      address: '4140 Parker Rd.',
+      zip: '75000 Paris',
+      phone: '+451 215 215',
+      fax: '+451 215 215'
+    },
+    {
+      city: 'New York',
+      address: '2715 Ash Dr. San Jose,',
+      zip: '75000 Paris',
+      phone: '+451 215 215',
+      fax: '+451 215 215'
+    },
+    {
+      city: 'London',
+      address: '3517 W. Gray St. Utica,',
+      zip: '75000 Paris',
+      phone: '+451 215 215',
+      fax: '+451 215 215'
+    }
+  ]
+  

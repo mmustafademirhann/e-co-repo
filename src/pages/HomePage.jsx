@@ -1,6 +1,6 @@
 import Carousel from '../components/Carousel';
 import Catagories from '../components/Catagories';
-import {Products} from '../components/Products';
+import {Product} from '../components/Product';
 import HeroSection from '../layout/HeroSection';
 import { CatagoriesLayout } from '../layout/CatagoriesLayout';
 import {carouselImages,categories,productsImages,heroData}from '../data.js'

@@ -1,8 +1,20 @@
 import { Phone, Mail, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 
-const DarkNavbar = () => {
+const DarkNavbar = ({mode = 'default'}) => {
+  const baseClasses = 'py-2 px-4 text-white hidden lg:block'
+  let modeClasses = ''
+  switch (mode) {
+    case 'shop':
+      modeClasses = 'bg-[#23856D]'
+      break
+    case 'contact':
+      modeClasses = 'bg-blue-900'
+      break
+    default:
+      modeClasses = 'bg-gray-800'
+  }
   return (
-    <div className="hidden sm:block bg-[#252B42] text-white text-sm py-2 px-4">
+    <div className={`${baseClasses} ${modeClasses}`}>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0">
         
         {/* Sol: Telefon ve E-posta */}

@@ -1,4 +1,4 @@
-export const Products = ({ products }) => {
+export const Product = ({ products }) => {
     const colors = ['bg-blue-500', 'bg-teal-500', 'bg-orange-500', 'bg-black'];
   
     return (

@@ -1,10 +1,24 @@
+import { useState } from 'react'
+
+import { Lgy } from '../components/Lgy'
+import { Qanswer1 } from '../components/Qanswer1'
+import { Qanswers2 } from '../components/Qanswers2'
+import { ContactUs } from '../components/ContactUs'
 const Contact = () => {
+  const [activeQuestion, setActiveQuestion] = useState(null)
+
     return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
-        <p className="text-gray-700">
-          Have questions? Email us at <a href="mailto:support@eshop.com" className="text-blue-600 underline">support@eshop.com</a>
-        </p>
+    <div className="flex flex-col bg-white">
+      {/* Section 1: Get answers to all your questions */}
+      <Qanswer1 />
+      
+      {/* Section 2: Questions & Answers */}
+      <Qanswers2 />
+      
+      {/* Section 3: CONTACT US */}
+      <ContactUs />
+      <Lgy />
+     
       </div>
     )
   }
