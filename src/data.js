@@ -198,11 +198,36 @@ export const carouselImages = [
   ]
 
   export const categoriesForShopPage = [
-    { id: 1, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes1/200/250' },
-    { id: 2, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes2/200/250' },
-    { id: 3, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes3/200/250' },
-    { id: 4, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes4/200/250' },
-    { id: 5, name: 'CLOTHS', subtext: '5 items', image: 'https://picsum.photos/seed/clothes5/200/250' }
+    {
+      id: 1,
+      name: "Women",
+      image: "/src/assets/sarikiz.png",
+      subtext: "Spring Collection"
+    },
+    {
+      id: 2,
+      name: "Men",
+      image: "/src/assets/sapkali.png",
+      subtext: "New Arrivals"
+    },
+    {
+      id: 3,
+      name: "Kids",
+      image: "/src/assets/zrgn.png",
+      subtext: "Comfortable Styles"
+    },
+    {
+      id: 4,
+      name: "Accessories",
+      image: "/src/assets/sin2.png",
+      subtext: "New Trends"
+    },
+    {
+      id: 5,
+      name: "Sale",
+      image: "/src/assets/kzn.png",
+      subtext: "Up to 70% Off"
+    }
   ]
   
   export const partnersForShopPage = [

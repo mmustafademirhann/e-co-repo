@@ -33,10 +33,10 @@ const LightNavbar = () => {
           
           <div className="flex items-center gap-4 text-blue-500">
             {/* Login / Register */}
-            <button className="flex items-center space-x-2 hover:text-blue-600">
+            <Link to="/signup" className="flex items-center space-x-2 hover:text-blue-600">
               <User size={20} />
               <span className="font-semibold">Login / Register</span>
-            </button>
+            </Link>
 
             {/* Search */}
             <button className="p-2 hover:bg-blue-50 rounded-full">

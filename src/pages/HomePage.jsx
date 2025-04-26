@@ -7,7 +7,6 @@ import {carouselImages,categories,productsImages,heroData}from '../data.js'
 import FeaturedPosts from '../layout/FeaturedPosts';
 import { ProductLayout } from '../layout/ProductLayout';
 
-
 const HomePage = () => {
   return (
     <>

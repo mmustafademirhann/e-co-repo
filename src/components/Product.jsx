@@ -1,4 +1,4 @@
-export const Product = ({ products }) => {
+export const Product = ({ products, onProductClick }) => {
     const colors = ['bg-blue-500', 'bg-teal-500', 'bg-orange-500', 'bg-black'];
   
     return (
@@ -8,7 +8,8 @@ export const Product = ({ products }) => {
           {products.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2 flex flex-col border border-gray-200"
+              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2 flex flex-col border border-gray-200 cursor-pointer"
+              onClick={() => onProductClick && onProductClick(item)}
             >
               <img
                 src={item.src}
@@ -40,7 +41,8 @@ export const Product = ({ products }) => {
           {products.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2 flex flex-col border border-gray-200"
+              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2 flex flex-col border border-gray-200 cursor-pointer"
+              onClick={() => onProductClick && onProductClick(item)}
             >
               <img
                 src={item.src}

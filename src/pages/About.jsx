@@ -1,13 +1,35 @@
+import Firms from "../components/Firms";
+import Strc from "../components/Strc";
+import Description from "../components/Description";
+import HeroOfAbout from "../components/HeroOfAbout";
+import VideoOfAbout from "../components/VideoOfAbout";
+import TeamSectionOfAbout from "../components/TeamSectionOfAbout";
+import CTASectionOfAbout from "../components/CTASectionOfAbout";
 const About = () => {
-    return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">About Us</h1>
-        <p className="text-gray-700">
-          SOmeSOmenotsome changes platform built by tech enthusiasts. We provide high-quality, affordable tech gear to customers worldwide.
-        </p>
-      </div>
-    )
-  }
-  
-  export default About
+  return (
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+     <HeroOfAbout />
+
+      {/* Description Section */}
+      <Description />
+
+      {/* Stats Section */}
+      <Strc />
+
+      {/* Video Section */}
+     <VideoOfAbout />
+
+      {/* Team Section */}
+      <TeamSectionOfAbout />
+      {/* Companies Section */}
+      <Firms />
+
+      {/* CTA Section - Using styles from Lgy component */}
+      <CTASectionOfAbout />
+    </div>
+  )
+}
+
+export default About
   

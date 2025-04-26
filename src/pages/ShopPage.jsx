@@ -6,17 +6,16 @@ import { ShopHeader } from '../components/ShopHeader'
 import { CategoryBanners } from '../components/CategoryBanners'
 import { FilterBar } from '../components/FilterBar'
 import { Pagination } from '../components/Pagination'
-import { Partners } from '../components/Partners'
+import  Firms  from '../components/Firms'
 
 const ShopPage = () => {
   const history = useHistory()
   const [currentPage, setCurrentPage] = useState(1)
 
-
   const handleClick = (product) => {
     history.push({
       pathname: '/product',
-      state: { product }
+      state: { selectedProduct: product }
     })
   }
 
@@ -30,13 +29,13 @@ const ShopPage = () => {
       <FilterBar />
       {/* Products Section */}
       <div className="px-4 py-8">
-        <Product products={productsForShopPage} />
+        <Product products={productsForShopPage} onProductClick={handleClick} />
       </div>
       {/* Pagination */}
       <Pagination />
 
       {/* Partners Section */}
-      <Partners />
+      <Firms />
     </div>
   )
 }
