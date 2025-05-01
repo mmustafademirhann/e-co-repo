@@ -149,14 +149,14 @@ const TeamPage = () => {
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Meet Our Team
           </h2>
-          
+
           <div className="space-y-6">
             {teamMembers.map((member) => (
               <div key={member.id} className="flex flex-col items-center">
                 <div className={`${member.bgColor} w-full overflow-hidden mb-3`}>
-                  <img
-                    src={member.image}
-                    alt={member.name}
+                <img
+                  src={member.image}
+                  alt={member.name}
                     className="w-full aspect-square object-cover"
                   />
                 </div>
@@ -297,13 +297,13 @@ const TeamPage = () => {
           </h2>
 
           <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-8">
               {teamMembers.slice(0, 9).map((member, index) => (
-                <div key={member.id} className="flex flex-col items-center">
+              <div key={member.id} className="flex flex-col items-center">
                   <div className={`${member.bgColor} w-full overflow-hidden mb-4`}>
-                    <img
-                      src={member.image}
-                      alt={member.name}
+                <img
+                  src={member.image}
+                  alt={member.name}
                       className="w-full aspect-square object-cover"
                     />
                   </div>
@@ -326,8 +326,8 @@ const TeamPage = () => {
                       </svg>
                     </a>
                   </div>
-                </div>
-              ))}
+              </div>
+            ))}
             </div>
           </div>
         </div>

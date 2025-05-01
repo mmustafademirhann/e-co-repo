@@ -1,82 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart, Eye } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSingleProduct } from '../redux/actions/productActions';
+import { addToCart } from '../redux/actions/shoppingCartActions';
+import { toast } from 'react-toastify';
 
+// Import components
+import ProductTabs from '../components/ProductTabs';
 
 const ProductDetail = () => {
-  const location = useLocation();
-  const selectedProduct = location.state?.selectedProduct;
+  // Extract all params from URL
+  const { gender, categoryName, categoryId, productNameSlug, productId } = useParams();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  
+  // Get product from Redux store
+  const singleProduct = useSelector(state => state.product?.singleProduct);
+  const singleProductLoading = useSelector(state => state.product?.singleProductLoading);
+  const error = useSelector(state => state.product?.error);
+  const cart = useSelector(state => state.shoppingCart?.cart);
   
   const [selectedColor, setSelectedColor] = useState(0);
-  const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
-  
-  // Use the selected product from location state or fall back to mock data
-  const [product, setProduct] = useState(null);
-  
-  useEffect(() => {
-    if (selectedProduct) {
-      // Transform the incoming product data to match our detail structure
-      setProduct({
-        id: selectedProduct.id,
-        name: selectedProduct.title,
-        price: selectedProduct.price,
-        rating: 4.5, // Default value or could be part of the product data
-        reviewCount: 10, // Default value or could be part of the product data
-        description: selectedProduct.description || "Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.",
-        availability: "In Stock",
-        sku: `PROD-${selectedProduct.id}`,
-        colors: ['#2091F9', '#2DC071', '#E77C40', '#252B42'],
-        images: [
-          selectedProduct.src, // Main image
-          // Fallback to some default additional images if needed
-          'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91',
-          'https://images.unsplash.com/photo-1598327105666-5b89351aff97'
-        ]
-      });
-    } else {
-      // Fallback mock data if no product is provided
-      setProduct({
-        id: 1,
-        name: "Floating Phone",
-        price: 1139.33,
-        rating: 4.5,
-        reviewCount: 10,
-        description: "Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.",
-        availability: "In Stock",
-        sku: "PHONE-YLW-2023",
-        colors: ['#2091F9', '#2DC071', '#E77C40', '#252B42'],
-        images: [
-          'https://images.unsplash.com/photo-1607477083000-782c0bbede32',
-          'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91',
-          'https://images.unsplash.com/photo-1598327105666-5b89351aff97'
-        ]
-      });
-    }
-  }, [selectedProduct]);
-
-  // Mock bestseller products
-  const bestsellerProducts = [
-    { id: 1, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1603199506016-b9a594b593c0', department: 'English Department' },
-    { id: 2, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1577937927133-61d09c5644b3', department: 'English Department' },
-    { id: 3, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1603199506016-b9a594b593c0', department: 'English Department' },
-    { id: 4, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1577937927133-61d09c5644b3', department: 'English Department' },
-    { id: 5, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91', department: 'English Department' },
-    { id: 6, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1', department: 'English Department' },
-    { id: 7, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1603199506016-b9a594b593c0', department: 'English Department' },
-    { id: 8, name: 'Graphic Design', price: 16.48, image: 'https://images.unsplash.com/photo-1577937927133-61d09c5644b3', department: 'English Department' },
-  ];
-
   const [mainImage, setMainImage] = useState('');
-  
-  useEffect(() => {
-    // Set main image when product changes
-    if (product && product.images && product.images.length > 0) {
-      setMainImage(product.images[0]);
-    }
-  }, [product]);
+  const [quantity, setQuantity] = useState(1);
 
-  // Helper function to render the rating stars
+  // Sayfa yüklendiğinde en üste kaydırma
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Fetch product data when component mounts or productId changes
+  useEffect(() => {
+    if (productId) {
+      console.log("Fetching product with ID:", productId);
+      dispatch(fetchSingleProduct(productId));
+      // Ürün değiştiğinde de en üste kaydır
+      window.scrollTo(0, 0);
+    }
+  }, [dispatch, productId]);
+
+  // Set main image when product data is loaded
+  useEffect(() => {
+    if (singleProduct && singleProduct.images && singleProduct.images.length > 0) {
+      // Check the structure of images to determine how to access the URL
+      if (typeof singleProduct.images[0] === 'string') {
+        setMainImage(singleProduct.images[0]);
+      } else if (singleProduct.images[0].url) {
+        setMainImage(singleProduct.images[0].url);
+      }
+      console.log("Set main image:", singleProduct.images[0]);
+    }
+  }, [singleProduct]);
+
+  // Sepete ekleme fonksiyonu
+  const handleAddToCart = () => {
+    if (singleProduct) {
+      dispatch(addToCart(singleProduct, quantity));
+      toast.success(`${singleProduct.name || 'Ürün'} sepete eklendi!`, {
+        position: "top-right",
+        autoClose: 2000
+      });
+
+      // Sepetteki ürün sayısını ve toplam ürün tutarını göster
+      console.log("Cart updated:", {
+        itemCount: getCartItemCount(),
+        totalPrice: getCartTotalPrice()
+      });
+    }
+  };
+
+  // Sepetteki toplam ürün sayısını hesapla
+  const getCartItemCount = () => {
+    return cart?.reduce((total, item) => total + item.count, 0) || 0;
+  };
+
+  // Sepetteki ürünlerin toplam fiyatını hesapla
+  const getCartTotalPrice = () => {
+    return cart?.reduce((total, item) => total + (item.product.price * item.count), 0) || 0;
+  };
+
+  // Miktarı artır/azalt
+  const increaseQuantity = () => setQuantity(prev => prev + 1);
+  const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
+
+  console.log("Product Detail - current state:", { singleProduct, singleProductLoading, error, mainImage });
+
   const renderRatingStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -84,48 +94,129 @@ const ProductDetail = () => {
     
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push(<svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>);
+        stars.push(<span key={i} className="text-yellow-400">★</span>);
       } else if (i === fullStars && hasHalfStar) {
-        stars.push(<svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipPath="url(#half-star)"></path></svg>);
+        stars.push(<span key={i} className="text-yellow-400">★</span>);
       } else {
-        stars.push(<svg key={i} className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>);
+        stars.push(<span key={i} className="text-gray-300">★</span>);
       }
     }
     
     return stars;
   };
 
-  if (!product) {
-    return <p className="p-4">Loading product details...</p>;
-    }
-  
+  const handleBackButton = () => {
+    history.goBack();
+  };
+
+  // Show loading spinner
+  if (singleProductLoading) {
     return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Show error message
+  if (error) {
+    return (
+      <div className="p-4 text-center">
+        <h2 className="text-xl font-semibold text-red-600 mb-4">Ürün Yüklenemedi</h2>
+        <p className="text-red-500 mb-4">Hata: {error}</p>
+        <p className="text-gray-600 mb-4">Ürün yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin veya farklı bir ürün seçin.</p>
+        <button 
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleBackButton}
+        >
+          Geri Dön
+        </button>
+      </div>
+    );
+  }
+
+  // If no product data yet
+  if (!singleProduct) {
+    return (
+      <div className="p-4 text-center">
+        <p className="text-lg mb-4">Ürün detayları yükleniyor...</p>
+        <div className="animate-spin mx-auto rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+  
+  // Prepare product data for components
+  const product = {
+    id: singleProduct.id,
+    name: singleProduct.name || singleProduct.title,
+    price: singleProduct.price || 0,
+    rating: singleProduct.rating || 0,
+    reviewCount: singleProduct.sell_count || 0,
+    description: singleProduct.description || "No description available",
+    availability: singleProduct.stock > 0 ? "In Stock" : "Out of Stock",
+    sku: `PROD-${singleProduct.id}`,
+    colors: ['#2091F9', '#2DC071', '#E77C40', '#252B42'], 
+    images: singleProduct.images?.map(img => typeof img === 'string' ? img : img.url) || []
+  };
+
+  console.log("Prepared product data:", product);
+
+  return (
     <div className="bg-white">
+      {/* Back button */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <button 
+          onClick={handleBackButton}
+          className="flex items-center text-gray-600 hover:text-blue-500"
+        >
+          <ChevronLeft size={20} />
+          <span>Back</span>
+        </button>
+      </div>
+
       {/* Mobile View */}
-      <div className="md:hidden">
+      <div className="md:hidden px-4">
+        {/* Product Image */}
         <div className="relative">
-          <button className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10">
-            <ChevronLeft size={20} />
-          </button>
-          <img src={mainImage} alt={product.name} className="w-full h-[400px] object-cover" />
-          <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10">
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-4 mb-6 px-4">
-          {product.images.slice(0, 2).map((image, index) => (
-            <div 
-              key={index} 
-              className={`w-[80px] h-[80px] cursor-pointer border ${mainImage === image ? 'border-blue-500' : 'border-gray-200'}`}
-              onClick={() => setMainImage(image)}
-            >
-              <img src={image} alt={`${product.name} view ${index + 1}`} className="w-full h-full object-cover" />
+          <div className="h-[400px] bg-gray-100 flex items-center justify-center mb-4 rounded overflow-hidden">
+            {mainImage ? (
+              <img 
+                src={mainImage} 
+                alt={product.name} 
+                className="h-full w-full object-contain" 
+              />
+            ) : (
+              <div className="text-gray-400">No image available</div>
+            )}
+          </div>
+          
+          {/* Image navigation */}
+          {product.images && product.images.length > 1 && (
+            <div className="flex justify-center space-x-2 mb-6">
+              {product.images.slice(0, 3).map((image, index) => (
+                <button 
+                  key={index}
+                  onClick={() => setMainImage(image)}
+                  className={`w-16 h-16 rounded overflow-hidden border-2 ${mainImage === image ? 'border-blue-500' : 'border-transparent'}`}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Product thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover" 
+                  />
+                </button>
+              ))}
+              {product.images.length > 3 && (
+                <div className="w-16 h-16 rounded bg-gray-100 flex items-center justify-center text-sm text-gray-500">
+                  +{product.images.length - 3}
+                </div>
+              )}
             </div>
-          ))}
+          )}
         </div>
 
-        <div className="px-4 pb-8">
+        {/* Product Info */}
+        <div className="pb-6">
           <h1 className="text-2xl font-medium text-[#252B42] mb-2">{product.name}</h1>
           <div className="flex items-center mb-2">
             <div className="flex">{renderRatingStars(product.rating)}</div>
@@ -153,15 +244,36 @@ const ProductDetail = () => {
               ))}
             </div>
 
+            {/* Quantity Controls */}
+            <div className="flex items-center mb-4">
+              <span className="text-sm font-medium text-gray-700 mr-4">Quantity:</span>
+              <div className="flex items-center border border-gray-300 rounded">
+                <button 
+                  onClick={decreaseQuantity} 
+                  className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                >
+                  -
+                </button>
+                <span className="px-4 py-1 border-l border-r border-gray-300">{quantity}</span>
+                <button 
+                  onClick={increaseQuantity} 
+                  className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             <div className="flex space-x-2">
-              <button className="flex-1 bg-[#23A6F0] text-white py-3 rounded-md text-sm font-bold">
-                Select Options
+              <button 
+                className="flex-1 bg-[#23A6F0] text-white py-3 rounded-md text-sm font-bold flex items-center justify-center"
+                onClick={handleAddToCart}
+              >
+                <ShoppingCart size={18} className="mr-2" />
+                Add to Cart
               </button>
               <button className="bg-white border border-gray-300 p-3 rounded-md">
                 <Heart size={20} className="text-gray-700" />
-              </button>
-              <button className="bg-white border border-gray-300 p-3 rounded-md">
-                <ShoppingCart size={20} className="text-gray-700" />
               </button>
               <button className="bg-white border border-gray-300 p-3 rounded-md">
                 <Eye size={20} className="text-gray-700" />
@@ -170,92 +282,45 @@ const ProductDetail = () => {
           </div>
         </div>
         
-        {/* Mobile Product Tabs */}
-        <div className="md:hidden border-t border-gray-200 mt-6">
-          <div className="px-4 py-6">
-            <div className="border-b border-gray-200 mb-4">
-              <div className="flex space-x-4 text-sm overflow-x-auto">
-                <button
-                  className={`pb-2 font-medium whitespace-nowrap ${activeTab === 'description' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab('description')}
-                >
-                  Description
-                </button>
-                <button
-                  className={`pb-2 font-medium whitespace-nowrap ${activeTab === 'additional' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab('additional')}
-                >
-                  Additional Information
-                </button>
-                <button
-                  className={`pb-2 font-medium whitespace-nowrap ${activeTab === 'reviews' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab('reviews')}
-                >
-                  Reviews ({product.reviewCount})
-                </button>
-              </div>
-            </div>
+        {/* Product Tabs - Mobile */}
+        <div className="border-t border-gray-200 pt-6 pb-8">
+          <div className="flex border-b">
+            <button
+              onClick={() => setActiveTab('description')}
+              className={`px-4 py-2 text-sm font-medium ${activeTab === 'description' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
+            >
+              Description
+            </button>
+            <button
+              onClick={() => setActiveTab('additional')}
+              className={`px-4 py-2 text-sm font-medium ${activeTab === 'additional' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
+            >
+              Additional Info
+            </button>
+            <button
+              onClick={() => setActiveTab('reviews')}
+              className={`px-4 py-2 text-sm font-medium ${activeTab === 'reviews' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
+            >
+              Reviews
+            </button>
+          </div>
 
+          <div className="pt-4">
             {activeTab === 'description' && (
-              <div>
-                <div className="mb-6">
-                  <img 
-                    src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" 
-                    alt="Product feature" 
-                    className="w-full h-48 object-cover mb-4"
-                  />
-                  
-                  <h3 className="text-lg font-bold mb-2 text-[#252B42]">the quick fox jumps over</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                  </p>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                  </p>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                  </p>
-
-                  <h3 className="text-lg font-bold mb-2 mt-6 text-[#252B42]">the quick fox jumps over</h3>
-                  
-                  <div className="space-y-2">
-                    {[1, 2, 3, 4].map((item) => (
-                      <details key={item} className="group text-sm">
-                        <summary className="flex items-center text-gray-600 cursor-pointer">
-                          <ChevronRight size={16} className="text-gray-400 group-open:rotate-90 transition-transform" />
-                          <span className="ml-1">the quick fox jumps over the lazy dog</span>
-                        </summary>
-                      </details>
-                    ))}
-                  </div>
-
-                  <h3 className="text-lg font-bold mb-2 mt-6 text-[#252B42]">the quick fox jumps over</h3>
-                  
-                  <div className="space-y-2">
-                    {[1, 2, 3, 4].map((item) => (
-                      <details key={`b-${item}`} className="group text-sm">
-                        <summary className="flex items-center text-gray-600 cursor-pointer">
-                          <ChevronRight size={16} className="text-gray-400 group-open:rotate-90 transition-transform" />
-                          <span className="ml-1">the quick fox jumps over the lazy dog</span>
-                        </summary>
-                      </details>
-                    ))}
-                  </div>
-                </div>
+              <div className="text-sm text-gray-600">
+                <p>{product.description}</p>
               </div>
             )}
-            
             {activeTab === 'additional' && (
-              <div className="text-gray-600">
-                <h3 className="text-lg font-bold mb-4">Additional Information</h3>
-                <p>Weight, dimensions, materials, etc. would go here.</p>
+              <div className="text-sm text-gray-600">
+                <p>SKU: {product.sku}</p>
+                <p>Category: {categoryName || 'General'}</p>
+                <p>Tags: Premium, Quality</p>
               </div>
             )}
-            
             {activeTab === 'reviews' && (
-              <div>
-                <h3 className="text-lg font-bold mb-2">Customer Reviews</h3>
-                <p className="text-gray-600 mb-4">No reviews yet. Be the first to review this product.</p>
+              <div className="text-sm text-gray-600">
+                <p>No reviews yet. Be the first to review this product.</p>
               </div>
             )}
           </div>
@@ -269,31 +334,44 @@ const ProductDetail = () => {
           <Link to="/" className="hover:text-gray-900">Home</Link>
           <span className="text-gray-400">›</span>
           <Link to="/shop" className="hover:text-gray-900">Shop</Link>
+          <span className="text-gray-400">›</span>
+          <span className="text-gray-900">{product.name}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Product Images */}
           <div>
-            <div className="relative">
-              <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10">
-                <ChevronLeft size={20} />
-              </button>
-              <img src={mainImage} alt={product.name} className="w-full h-[450px] object-cover" />
-              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10">
-                <ChevronRight size={20} />
-              </button>
+            <div className="mb-4 bg-gray-100 rounded overflow-hidden">
+              <div className="h-[500px] flex items-center justify-center">
+                {mainImage ? (
+                  <img 
+                    src={mainImage} 
+                    alt={product.name} 
+                    className="h-full w-full object-contain" 
+                  />
+                ) : (
+                  <div className="text-gray-400">No image available</div>
+                )}
+              </div>
             </div>
-            <div className="flex gap-4 mt-4">
-              {product.images.slice(0, 2).map((image, index) => (
-                <div 
-                  key={index} 
-                  className={`w-20 h-20 cursor-pointer border ${mainImage === image ? 'border-blue-500' : 'border-gray-200'}`}
-                  onClick={() => setMainImage(image)}
-                >
-                  <img src={image} alt={`${product.name} view ${index + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
+            
+            {product.images && product.images.length > 0 && (
+              <div className="grid grid-cols-4 gap-2">
+                {product.images.map((image, index) => (
+                  <button 
+                    key={index}
+                    onClick={() => setMainImage(image)}
+                    className={`aspect-square rounded overflow-hidden border-2 ${mainImage === image ? 'border-blue-500' : 'border-transparent'}`}
+                  >
+                    <img 
+                      src={image} 
+                      alt={`Product thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover" 
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -327,9 +405,33 @@ const ProductDetail = () => {
                 ))}
               </div>
 
+              {/* Quantity Controls */}
+              <div className="flex items-center mb-6">
+                <span className="text-sm font-medium text-gray-700 mr-4">Quantity:</span>
+                <div className="flex items-center border border-gray-300 rounded">
+                  <button 
+                    onClick={decreaseQuantity} 
+                    className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-1 border-l border-r border-gray-300">{quantity}</span>
+                  <button 
+                    onClick={increaseQuantity} 
+                    className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
               <div className="flex space-x-4">
-                <button className="px-10 bg-[#23A6F0] text-white py-3 rounded hover:bg-[#1d8fcf] font-medium">
-                  Select Options
+                <button 
+                  className="px-10 bg-[#23A6F0] text-white py-3 rounded hover:bg-[#1d8fcf] font-medium flex items-center"
+                  onClick={handleAddToCart}
+                >
+                  <ShoppingCart size={20} className="mr-2" />
+                  Add to Cart
                 </button>
                 <button className="bg-white border border-gray-300 p-3 rounded-md">
                   <Heart size={20} className="text-gray-700" />
@@ -346,98 +448,59 @@ const ProductDetail = () => {
         </div>
 
         {/* Product Tabs - Desktop */}
-        <div className="mt-16 border-t border-gray-200">
-          <div className="flex space-x-6 pt-4">
+        <div className="mt-16 border-t border-gray-200 pt-8">
+          <div className="flex border-b">
             <button
-              className={`py-3 px-4 text-sm font-medium ${activeTab === 'description' ? 'text-[#252B42] border-b-2 border-[#23A6F0]' : 'text-gray-500'}`}
               onClick={() => setActiveTab('description')}
+              className={`px-6 py-3 text-sm font-medium ${activeTab === 'description' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
             >
               Description
             </button>
             <button
-              className={`py-3 px-4 text-sm font-medium ${activeTab === 'additional' ? 'text-[#252B42] border-b-2 border-[#23A6F0]' : 'text-gray-500'}`}
               onClick={() => setActiveTab('additional')}
+              className={`px-6 py-3 text-sm font-medium ${activeTab === 'additional' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
             >
               Additional Information
             </button>
             <button
-              className={`py-3 px-4 text-sm font-medium ${activeTab === 'reviews' ? 'text-[#252B42] border-b-2 border-[#23A6F0]' : 'text-gray-500'}`}
               onClick={() => setActiveTab('reviews')}
+              className={`px-6 py-3 text-sm font-medium ${activeTab === 'reviews' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-600'}`}
             >
               Reviews ({product.reviewCount})
             </button>
           </div>
 
-          <div className="py-8">
+          <div className="py-6">
             {activeTab === 'description' && (
-              <div className="flex gap-10">
-                <div className="w-1/3">
-                  <img 
-                    src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace" 
-                    alt="Product feature" 
-                    className="w-full h-64 object-cover"
-                  />
-                </div>
-                <div className="w-2/3 space-y-6">
-                  <div>
-                    <h3 className="text-xl font-bold mb-2 text-[#252B42]">the quick fox jumps over</h3>
-                    <p className="text-gray-600">
-                      Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                    </p>
-                    <p className="text-gray-600 mt-2">
-                      Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                    </p>
-                    <p className="text-gray-600 mt-2">
-                      Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-2 text-[#252B42]">the quick fox jumps over</h3>
-                    
-                    <div className="space-y-2">
-                      {[1, 2, 3, 4].map((item) => (
-                        <div key={item} className="flex items-center text-gray-600">
-                          <ChevronRight size={16} className="text-gray-400 mr-1" />
-                          <span>the quick fox jumps over the lazy dog</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              <div className="text-gray-600 max-w-3xl">
+                <p className="mb-4">{product.description}</p>
+                <p>Our products are crafted with the highest quality materials to ensure durability and comfort. We take pride in our manufacturing process and stand behind every item we sell.</p>
               </div>
             )}
-            
             {activeTab === 'additional' && (
               <div className="text-gray-600">
-                <h3 className="text-lg font-bold mb-4 text-[#252B42]">Additional Information</h3>
-                <p>Weight, dimensions, materials, etc. would go here.</p>
+                <table className="min-w-full">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="py-3 w-1/4 font-medium">Color</td>
+                      <td className="py-3">Blue, Red, Green, Black</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 w-1/4 font-medium">SKU</td>
+                      <td className="py-3">{product.sku}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 w-1/4 font-medium">Category</td>
+                      <td className="py-3">{categoryName || 'General'}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
-            
             {activeTab === 'reviews' && (
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-bold mb-2 text-[#252B42]">the quick fox jumps over</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    {[1, 2, 3, 4].map((item) => (
-                      <li key={item} className="flex items-center">
-                        <ChevronRight size={16} className="text-gray-400 mr-1" />
-                        <span>the quick fox jumps over the lazy dog</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2 text-[#252B42]">the quick fox jumps over</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    {[1, 2, 3, 4].map((item) => (
-                      <li key={`b-${item}`} className="flex items-center">
-                        <ChevronRight size={16} className="text-gray-400 mr-1" />
-                        <span>the quick fox jumps over the lazy dog</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="text-gray-600">
+                <p className="mb-4">No reviews yet. Be the first to review this product.</p>
+                <button className="px-6 py-2 bg-blue-500 text-white rounded">Write a Review</button>
               </div>
             )}
           </div>
@@ -445,49 +508,29 @@ const ProductDetail = () => {
       </div>
 
       {/* Bestseller Products Section */}
-      <div className="bg-white py-10">
+      <div className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8 text-[#252B42] md:text-left text-center">BESTSELLER PRODUCTS</h2>
-          
-          {/* Mobile View */}
-          <div className="md:hidden flex justify-center">
-            <div className="grid grid-cols-1 gap-4 max-w-xs">
-              {bestsellerProducts.slice(0, 4).map((item) => (
-                <div key={item.id} className="border border-gray-200">
-                  <img src={item.image} alt={item.name} className="w-full" />
-                  <div className="px-4 pt-4 pb-5">
-                    <h3 className="text-[#252B42] font-medium text-left mb-2">{item.name}</h3>
-                    <p className="text-gray-500 text-sm text-left mb-3">{item.department}</p>
-                    <div className="flex space-x-2">
-                      <span className="text-gray-400 line-through">${(item.price * 1.2).toFixed(2)}</span>
-                      <span className="text-[#2DC071] font-medium">${item.price.toFixed(2)}</span>
-                    </div>
-                  </div>
+          <h2 className="text-2xl font-bold text-center mb-8">Bestseller Products</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="h-64 bg-gray-100">
+                  <img 
+                    src={`https://source.unsplash.com/random/300x400?product=${item}`} 
+                    alt={`Product ${item}`} 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop View */}
-          <div className="hidden md:grid grid-cols-4 gap-6">
-            {bestsellerProducts.map((item) => (
-              <div key={item.id} className="bg-white border border-gray-200">
-                <img src={item.image} alt={item.name} className="w-full aspect-square object-cover" />
-                <div className="p-5">
-                  <h3 className="text-[#252B42] font-medium text-left">{item.name}</h3>
-                  <p className="text-[#737373] text-sm text-left mt-1">{item.department}</p>
-                  <div className="flex space-x-2 mt-2">
-                    <span className="text-gray-400 line-through">${(item.price * 1.2).toFixed(2)}</span>
-                    <span className="text-[#2DC071] font-medium">${item.price.toFixed(2)}</span>
-                  </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-lg mb-1">Sample Product {item}</h3>
+                  <p className="text-sm text-gray-600 mb-2">Category</p>
+                  <p className="font-bold text-[#23856D]">$16.48</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-      
-      
     </div>
   );
 };

@@ -38,8 +38,12 @@ const SignUpForm = () => {
 
       const token = response.data?.token;
       if (token) {
-        localStorage.setItem('token', token);
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (data.remember) {
+          localStorage.setItem('token', token);
+        } else {
+          sessionStorage.setItem('token', token);
+        }
+        axiosInstance.defaults.headers.common['Authorization'] = token;
       }
 
       const userData = response.data?.data || response.data;
@@ -144,7 +148,7 @@ const SignUpForm = () => {
           </form>
           <div className="mt-6 text-center">
             <span className="text-sm text-gray-600">Hesabınız yok mu? </span>
-            <Link to="/realsignup" className="text-blue-600 hover:underline">Oluşturun</Link>
+            <Link to="/signup" className="text-blue-600 hover:underline">Oluşturun</Link>
           </div>
         </div>
       </div>

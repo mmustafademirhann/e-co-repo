@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { ContactUs } from '../components/ContactUs'
 
 const Contact = () => {
-  return (
+    return (
     <div className="flex flex-col bg-white">
       <ContactUs />
       
@@ -64,8 +64,9 @@ const Contact = () => {
           </button>
         </div>
       </div>
-    </div>
-  )
-}
-
-export default Contact
+      </div>
+    )
+  }
+  
+  export default Contact
+  
