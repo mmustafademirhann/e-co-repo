@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart, Eye } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSingleProduct } from '../redux/actions/productActions';
-import { addToCart } from '../redux/actions/shoppingCartActions';
+import { fetchSingleProduct, clearSingleProductError } from '../redux/actions/productActions';
+import { addProductToCart } from '../redux/actions/shoppingCartActions';
 import { toast } from 'react-toastify';
 
 // Import components
@@ -57,10 +57,15 @@ const ProductDetail = () => {
   // Sepete ekleme fonksiyonu
   const handleAddToCart = () => {
     if (singleProduct) {
-      dispatch(addToCart(singleProduct, quantity));
+      dispatch(addProductToCart(singleProduct, quantity));
+      
       toast.success(`${singleProduct.name || 'Ürün'} sepete eklendi!`, {
         position: "top-right",
-        autoClose: 2000
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
 
       // Sepetteki ürün sayısını ve toplam ürün tutarını göster

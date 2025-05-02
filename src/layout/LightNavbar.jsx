@@ -12,7 +12,8 @@ import {
   Plus,
   Minus,
   X,
-  LogOut
+  LogOut,
+  Package
 } from 'lucide-react'
 import Gravatar from 'react-gravatar'
 import { fetchCategories } from '../redux/actions/productActions'
@@ -148,7 +149,7 @@ const LightNavbar = () => {
   // Add handler for order history
   const handleOrderHistory = () => {
     setIsUserMenuOpen(false)
-    history.push('/my-orders') // This would link to the order history page
+    history.push('/orders')
   }
 
   return (
@@ -265,28 +266,20 @@ const LightNavbar = () => {
                 </button>
                 
                 {isUserMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md p-2 z-50">
-                    <Link 
-                      to="/profile" 
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Profile
-                    </Link>
-                    <button 
-                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <button
                       onClick={handleOrderHistory}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Order History
+                      <Package size={16} className="mr-2" />
+                      Previous Orders
                     </button>
-                    <button 
-                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-md"
+                    <button
                       onClick={handleUserLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
-                      <div className="flex items-center">
-                        <LogOut size={16} className="mr-2" />
-                        <span>Logout</span>
-                      </div>
+                      <LogOut size={16} className="mr-2" />
+                      Logout
                     </button>
                   </div>
                 )}
@@ -554,14 +547,14 @@ const LightNavbar = () => {
       {/* Mobile menu */}
       {isOpen && (
         <div className="lg:hidden bg-white flex flex-col items-center pt-16 pb-8 gap-6 text-[#737373] text-[30px] leading-[45px] tracking-[0.2px] text-center font-semibold">
-          <Link to="/" className="hover:font-normal transition-all duration-200">Home</Link>
-          <Link to="/shop" className="hover:font-normal transition-all duration-200">Product</Link>
-          <Link to="/pricing" className="hover:font-normal transition-all duration-200">Pricing</Link>
-          <Link to="/contact" className="mb-8 hover:font-normal transition-all duration-200">Contact</Link>
+          <Link to="/" className="hover:font-normal transition-all duration-200" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/shop" className="hover:font-normal transition-all duration-200" onClick={() => setIsOpen(false)}>Product</Link>
+          <Link to="/pricing" className="hover:font-normal transition-all duration-200" onClick={() => setIsOpen(false)}>Pricing</Link>
+          <Link to="/contact" className="mb-8 hover:font-normal transition-all duration-200" onClick={() => setIsOpen(false)}>Contact</Link>
           
           {user && (
             <>
-              <div className="flex items-center gap-2 py-2">
+              <div className="flex items-center gap-2 py-2 text-lg border-t pt-4 w-full justify-center">
                 {user.email ? (
                   <Gravatar 
                     email={user.email} 
@@ -574,15 +567,32 @@ const LightNavbar = () => {
                 )}
                 <span>{user.name}</span>
               </div>
-              <Link to="/profile" className="text-gray-700 hover:text-blue-600 py-2 pl-2 text-sm">Profile</Link>
+              <Link 
+                to="/profile" 
+                className="text-blue-600 hover:text-blue-800 py-2 pl-2 text-xl"
+                onClick={() => setIsOpen(false)}
+              >
+                Profile
+              </Link>
               <button 
-                className="text-left text-gray-700 hover:text-blue-600 py-2 pl-2 text-sm"
+                className="text-blue-600 hover:text-blue-800 py-2 pl-2 text-xl flex items-center justify-center"
                 onClick={() => {
                   handleOrderHistory();
                   setIsOpen(false);
                 }}
               >
-                Order History
+                <Package size={20} className="mr-2" />
+                Previous Orders
+              </button>
+              <button 
+                className="text-red-600 hover:text-red-800 py-2 pl-2 text-xl mt-4 flex items-center justify-center"
+                onClick={() => {
+                  handleUserLogout();
+                  setIsOpen(false);
+                }}
+              >
+                <LogOut size={20} className="mr-2" />
+                Logout
               </button>
             </>
           )}

@@ -115,57 +115,68 @@ export const fetchCategories = () => async (dispatch) => {
     }
 };
 
-// Thunk Action Creator for Products
-export const fetchProducts = ({ categoryId, limit = 25, offset = 0, filter, sort } = {}) => async (dispatch) => {
+// Thunk Action Creator for Products (Adapted from user-provided working version)
+export const fetchProducts = ({
+  categoryId, // Use categoryId to match ShopPage params
+  sort,
+  filter,
+  limit = 25, // Keep project's default limit
+  offset = 0,
+} = {}) => {
+  return async (dispatch) => {
+    console.log('fetchProducts (Merged Version): Params Received:', { categoryId, sort, filter, limit, offset });
     dispatch(setFetchState(FETCH_STATES.FETCHING));
+    
     try {
-        let url = 'https://workintech-fe-ecommerce.onrender.com/products';
-        const params = new URLSearchParams();
-        
-        if (categoryId) {
-            params.append('category_id', categoryId);
-        }
-        if (limit) {
-            params.append('limit', limit);
-        }
-        if (offset) {
-            params.append('offset', offset);
-        }
-        if (filter) {
-            params.append('filter', filter);
-        }
-        if (sort) {
-            params.append('sort', sort);
-        }
+      let query = "";
 
-        const queryString = params.toString();
-        const fullUrl = queryString ? `${url}?${queryString}` : url;
+      if (categoryId) {
+        query += `category=${categoryId}&`;
+      }
+      if (filter) {
+        query += `filter=${encodeURIComponent(filter)}&`;
+      }
+      if (sort) {
+        query += `sort=${encodeURIComponent(sort)}&`;
+      }
+      query += `limit=${limit}&offset=${offset}&`;
 
-        const response = await fetch(fullUrl);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (!data || !Array.isArray(data.products)) {
-            throw new Error('Invalid response format from API');
-        }
-        
-        dispatch(setProductList(data.products));
-        dispatch(setTotal(data.total || data.products.length));
-        dispatch(setLimit(limit));
-        dispatch(setOffset(offset));
-        if (filter !== undefined) dispatch(setFilter(filter));
-        if (sort !== undefined) dispatch(setSort(sort));
-        dispatch(setFetchState(FETCH_STATES.FETCHED));
+      if (query.endsWith("&")) {
+        query = query.slice(0, -1);
+      }
+
+      const url = `/products${query ? `?${query}` : ""}`;
+      console.log('fetchProducts (Merged Version): Fetching URL with axiosInstance:', url);
+
+      const response = await axiosInstance.get(url);
+      
+      console.log('fetchProducts (Merged Version): API Response Status:', response.status);
+      console.log('fetchProducts (Merged Version): Received data:', response.data);
+
+      const { products, total } = response.data;
+
+      if (!Array.isArray(products)) {
+          console.error('fetchProducts (Merged Version): Invalid products format:', products);
+          throw new Error('Invalid response format: products is not an array');
+      }
+
+      dispatch(setProductList(products));
+      dispatch(setTotal(total ?? products.length));
+      dispatch(setLimit(limit));
+      dispatch(setOffset(offset));
+      dispatch(setFetchState(FETCH_STATES.FETCHED));
+
     } catch (error) {
-        console.error('Error fetching products:', error);
-        dispatch(setProductList([]));
-        dispatch(setTotal(0));
-        dispatch(setFetchState(FETCH_STATES.FAILED));
+      console.error("fetchProducts (Merged Version): Error fetching products:", error);
+      if (error.response) {
+        console.error('API Error Response:', error.response.data);
+        console.error('API Error Status:', error.response.status);
+      }
+      dispatch(setProductList([])); 
+      dispatch(setTotal(0));
+      dispatch(setFetchState(FETCH_STATES.FAILED));
     }
+  };
 };
 
 // Thunk Action Creator for Single Product

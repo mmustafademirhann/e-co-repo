@@ -94,7 +94,8 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 singleProduct: action.payload,
-                error: action.payload ? null : state.error // Clear error if product loaded successfully
+                singleProductError: null,
+                selectedProduct: action.payload || state.selectedProduct
             };
         case SET_SINGLE_PRODUCT_LOADING:
             return {
@@ -104,18 +105,8 @@ const productReducer = (state = initialState, action) => {
         case SET_SINGLE_PRODUCT_ERROR:
             return {
                 ...state,
-                singleProductError: action.payload
-            };
-        case SET_PRODUCTS:
-            return {
-                ...state,
-                products: action.payload,
-                filteredProducts: action.payload
-            };
-        case SET_FILTERED_PRODUCTS:
-            return {
-                ...state,
-                filteredProducts: action.payload
+                singleProductError: action.payload,
+                singleProductLoading: false
             };
         case SET_PRODUCT_LOADING:
             console.log("SET_PRODUCT_LOADING action received:", action.payload);
@@ -127,14 +118,14 @@ const productReducer = (state = initialState, action) => {
             console.log("SET_PRODUCT_ERROR action received:", action.payload);
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
+                isLoading: false
             };
         case SET_SELECTED_PRODUCT:
             console.log("SET_SELECTED_PRODUCT action received:", action.payload);
             return {
                 ...state,
-                selectedProduct: action.payload,
-                singleProduct: action.payload || state.singleProduct // Ensure singleProduct is also set
+                selectedProduct: action.payload
             };
         default:
             return state;

@@ -24,6 +24,9 @@ const ShopPage = () => {
     const params = { categoryId }
     if (filter) params.filter = filter
     if (sort) params.sort = sort
+    
+    console.log('ShopPage useEffect: Dispatching fetchProducts with params:', params);
+    
     dispatch(fetchProducts(params))
   }, [dispatch, categoryId, filter, sort])
 
@@ -51,6 +54,9 @@ const ShopPage = () => {
       </div>
     )
   }
+
+  // Log the products array right before rendering
+  console.log('ShopPage: Rendering with products:', products);
 
   return (
     <div className="min-h-screen bg-white max-w-7xl mx-auto">

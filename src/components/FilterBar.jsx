@@ -1,35 +1,43 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Grid, List, Search } from 'lucide-react'
-import { fetchProducts, setFilter, setSort } from '../redux/actions/productActions'
+import { setFilter, setSort } from '../redux/actions/productActions'
 
 export const FilterBar = () => {
     const dispatch = useDispatch()
     const [viewMode, setViewMode] = useState('grid')
     
-    const { total, categoryId, filter, sort } = useSelector(state => state.product)
+    const { total, filter, sort } = useSelector(state => state.product)
     
-    const handleFilterChange = (value) => {
-        dispatch(setFilter(value))
-        const params = { categoryId }
-        if (value) params.filter = value
-        if (sort) params.sort = sort
-        dispatch(fetchProducts(params))
-    }
+    const [localFilter, setLocalFilter] = useState(filter || '');
+
+    useState(() => {
+        setLocalFilter(filter || '');
+    }, [filter]);
+
+    const handleFilterInputChange = (e) => {
+        setLocalFilter(e.target.value);
+    };
+
+    const applyFilter = () => {
+        dispatch(setFilter(localFilter));
+    };
+
+    const handleFilterKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            applyFilter();
+        }
+    };
     
-    const handleSortChange = (value) => {
-        dispatch(setSort(value))
-        const params = { categoryId }
-        if (filter) params.filter = filter
-        if (value) params.sort = value
-        dispatch(fetchProducts(params))
-    }
+    const handleSortChange = (e) => {
+        dispatch(setSort(e.target.value));
+    };
     
     return (
-        <div className="h-auto min-h-[60px] flex flex-col md:flex-row justify-between items-start md:items-center bg-white w-full px-4 py-4 gap-4">
+        <div className="h-auto min-h-[60px] flex flex-col md:flex-row justify-between items-start md:items-center bg-white w-full px-4 py-4 gap-4 border-t border-b border-gray-200">
             <div className="flex items-center">
                 <span className="text-sm font-bold text-[#737373]">
-                    {total ? `Showing all ${total} results` : 'Loading...'}
+                    {total ? `Showing ${total} results` : 'Loading results...'}
                 </span>
             </div>
             
@@ -40,8 +48,8 @@ export const FilterBar = () => {
                         id="sortSelect"
                         name="sort"
                         value={sort || ''}
-                        onChange={(e) => handleSortChange(e.target.value)}
-                        className="h-10 px-3 border border-[#DDDDDD] rounded text-sm text-[#737373] min-w-[160px]"
+                        onChange={handleSortChange}
+                        className="h-10 px-3 border border-[#DDDDDD] rounded text-sm text-[#737373] min-w-[160px] focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Sort by</option>
                         <option value="price:asc">Price: Low to High</option>
@@ -56,12 +64,16 @@ export const FilterBar = () => {
                             id="filterInput"
                             name="filter"
                             type="text"
-                            value={filter || ''}
-                            onChange={(e) => handleFilterChange(e.target.value)}
+                            value={localFilter}
+                            onChange={handleFilterInputChange}
+                            onBlur={applyFilter}
+                            onKeyDown={handleFilterKeyDown}
                             placeholder="Search products..."
-                            className="h-10 pl-3 pr-10 w-full border border-[#DDDDDD] rounded text-sm"
+                            className="h-10 pl-3 pr-10 w-full border border-[#DDDDDD] rounded text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <button onClick={applyFilter} className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-blue-600">
+                            <Search size={16} />
+                        </button>
                     </div>
                 </div>
 

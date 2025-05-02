@@ -1,10 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import clientReducer from './reducers/clientReducer';
 import productReducer from './reducers/productReducer';
 import shoppingCartReducer from './reducers/shoppingCartReducer';
 import cardReducer from './reducers/cardReducer';
+import { syncCartWithLocalStorage } from './actions/shoppingCartActions';
 
 const rootReducer = combineReducers({
     client: clientReducer,
@@ -15,7 +16,7 @@ const rootReducer = combineReducers({
 
 const store = createStore(
     rootReducer,
-    applyMiddleware(thunkMiddleware, logger)
+    applyMiddleware(thunk, syncCartWithLocalStorage, logger)
 );
 
 export default store;

@@ -7,6 +7,7 @@ import axiosInstance from '../api/axios';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/actions/clientActions.js';
+import { loadUserCart } from '../redux/actions/shoppingCartActions';
 import 'react-toastify/dist/ReactToastify.css';
 
 const loginSchema = yup.object().shape({
@@ -49,6 +50,11 @@ const SignUpForm = () => {
       const userData = response.data?.data || response.data;
       if (userData) {
         dispatch(setUser(userData));
+        
+        // Load and merge user's cart with anonymous cart if user has an ID
+        if (userData.id) {
+          dispatch(loadUserCart(userData.id));
+        }
       }
 
       const userName = userData?.name || 'Kullanıcı';
@@ -63,7 +69,10 @@ const SignUpForm = () => {
         theme: "colored"
       });
       
-      history.push('/');
+      // If there's a redirect path in location state, go there
+      // Otherwise go to home page
+      const { from } = history.location.state || { from: { pathname: '/' } };
+      history.push(from);
       
     } catch (error) {
       console.error('Login error:', error);

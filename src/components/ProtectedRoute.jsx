@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../redux/actions/clientActions';
+import { saveAnonymousCart } from '../redux/actions/shoppingCartActions';
 import axiosInstance from '../api/axios';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector(state => state.client);
+  const cart = useSelector(state => state.shoppingCart.cart);
   const [isLoading, setIsLoading] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
   
@@ -51,6 +53,24 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     return <div className="flex items-center justify-center h-screen">Yükleniyor...</div>;
   }
   
+  // Before redirecting to login, ensure cart is saved
+  const handleRedirect = (props) => {
+    // If user is not authenticated, save current cart state
+    if (!isAuthenticated && !isTokenValid && cart.length > 0) {
+      saveAnonymousCart(cart);
+      console.log('Saved cart for anonymous user before redirect to login', cart);
+    }
+    
+    return (
+      <Redirect
+        to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }}
+      />
+    );
+  };
+  
   return (
     <Route
       {...rest}
@@ -58,12 +78,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
         isAuthenticated || isTokenValid ? (
           <Component {...props} />
         ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location }
-            }}
-          />
+          handleRedirect(props)
         )
       }
     />

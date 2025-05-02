@@ -22,16 +22,20 @@ import SignUpForm from './components/SignUpForm'
 import RealSignUp from './components/RealSignUp'
 import ErrorBoundary from './components/ErrorBoundary'
 import ProtectedRoute from './components/ProtectedRoute'
+import PreviousOrdersPage from './pages/PreviousOrdersPage'
 import axiosInstance from './api/axios'
 import { setUser } from './redux/actions/clientActions'
 import { clearSingleProductError, fetchSingleProduct } from './redux/actions/productActions'
-import { loadUserCart } from './redux/actions/shoppingCartActions'
+import { loadUserCart, initializeCart } from './redux/actions/shoppingCartActions'
 
 // Create a component to handle auto-login
 const AutoLoginHandler = () => {
   const dispatch = useDispatch();
   
   useEffect(() => {
+    // Initialize cart regardless of auth status
+    dispatch(initializeCart());
+    
     const token = localStorage.getItem('token');
     if (token) {
       // Set token in axios headers
@@ -111,6 +115,7 @@ function App() {
             <Route path="/team" component={TeamPage} />
             <Route path="/login" component={SignUpForm} />
             <Route path="/signup" component={RealSignUp} />
+            <ProtectedRoute path="/orders" component={PreviousOrdersPage} />
           </Switch>
         </Layout>
         <ToastContainer
