@@ -1,9 +1,9 @@
 import React from 'react';
 
-// Firma logolarını import edelim (varsayılan olarak şu isimleri kullanıyorum, sizin assets klasörünüzdeki gerçek dosya adlarına göre değiştirin)
-import baoli from '../assets/firm/hooli.png';
+// Import firm logo images directly
+import hooli from '../assets/firm/hooli.png';
 import lyft from '../assets/firm/lyft.png';
-import plane from '../assets/firm/yaprak.png';
+import yaprak from '../assets/firm/yaprak.png';
 import stripe from '../assets/firm/stripe.png';
 import aws from '../assets/firm/aws.png';
 import reddit from '../assets/firm/reddit.png';
@@ -11,9 +11,9 @@ import reddit from '../assets/firm/reddit.png';
 const Firms = () => {
   // Firma logolarını bir dizide tutalım
   const firmLogos = [
-    { id: 1, name: 'Baoli', image: baoli },
+    { id: 1, name: 'Hooli', image: hooli },
     { id: 2, name: 'Lyft', image: lyft },
-    { id: 3, name: 'Plane', image: plane },
+    { id: 3, name: 'Plane', image: yaprak },
     { id: 4, name: 'Stripe', image: stripe },
     { id: 5, name: 'AWS', image: aws },
     { id: 6, name: 'Reddit', image: reddit }

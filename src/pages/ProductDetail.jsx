@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart, Eye } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSingleProduct, clearSingleProductError } from '../redux/actions/productActions';
+import { 
+  fetchSingleProduct, 
+  clearSingleProductError,
+  fetchBestsellerProducts 
+} from '../redux/actions/productActions';
 import { addProductToCart } from '../redux/actions/shoppingCartActions';
 import { toast } from 'react-toastify';
 
 // Import components
 import ProductTabs from '../components/ProductTabs';
+import BestsellerProducts from '../components/BestsellerProducts';
 
 const ProductDetail = () => {
   // Extract all params from URL
@@ -21,12 +26,17 @@ const ProductDetail = () => {
   const error = useSelector(state => state.product?.error);
   const cart = useSelector(state => state.shoppingCart?.cart);
   
+  // Get bestseller products from Redux store
+  const bestsellerProducts = useSelector(state => state.product?.bestsellerProducts);
+  const bestsellerLoading = useSelector(state => state.product?.bestsellerLoading);
+  const bestsellerError = useSelector(state => state.product?.bestsellerError);
+  
   const [selectedColor, setSelectedColor] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
   const [mainImage, setMainImage] = useState('');
   const [quantity, setQuantity] = useState(1);
 
-  // Sayfa yüklendiğinde en üste kaydırma
+  // Scroll to top when page loads
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -36,10 +46,16 @@ const ProductDetail = () => {
     if (productId) {
       console.log("Fetching product with ID:", productId);
       dispatch(fetchSingleProduct(productId));
-      // Ürün değiştiğinde de en üste kaydır
+      // Scroll to top when product changes
       window.scrollTo(0, 0);
     }
   }, [dispatch, productId]);
+  
+  // Fetch bestseller products when component mounts
+  useEffect(() => {
+    console.log("Fetching bestseller products");
+    dispatch(fetchBestsellerProducts(4)); // Fetch 4 bestseller products
+  }, [dispatch]);
 
   // Set main image when product data is loaded
   useEffect(() => {
@@ -513,29 +529,17 @@ const ProductDetail = () => {
       </div>
 
       {/* Bestseller Products Section */}
-      <div className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-8">Bestseller Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="bg-white shadow rounded-lg overflow-hidden">
-                <div className="h-64 bg-gray-100">
-                  <img 
-                    src={`https://source.unsplash.com/random/300x400?product=${item}`} 
-                    alt={`Product ${item}`} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-lg mb-1">Sample Product {item}</h3>
-                  <p className="text-sm text-gray-600 mb-2">Category</p>
-                  <p className="font-bold text-[#23856D]">$16.48</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      {bestsellerLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
-      </div>
+      ) : bestsellerError ? (
+        <div className="p-4 text-center text-red-500">
+          <p>Error loading bestseller products: {bestsellerError}</p>
+        </div>
+      ) : (
+        <BestsellerProducts bestsellerProducts={bestsellerProducts} />
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const Bandage = () => {
         <div className="flex flex-col sm:flex-row sm:items-center w-full">
           {/* Logo */}
           <span className="text-lg font-bold text-gray-800 mb-2 sm:mb-0 sm:mr-4">
-            Bandage
+            E_commerce
           </span>
           
 

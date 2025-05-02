@@ -2,11 +2,16 @@ import React from 'react';
 import { mockPosts } from '../data';
 import FeaturedPostCard from '../components/FeaturedPostCard';
 
+// Import the additional images needed for blog posts
+import afgn from '../assets/afgn.png';
+import uiii from '../assets/uiii.png';
+import rng from '../assets/rng.png';
+
 // Create more blog posts for the grid layout
 const moreBlogPosts = [
   ...mockPosts,
   {
-    image: "/src/assets/afgn.png",
+    image: afgn,
     category: ['Google', 'Trending', 'New'],
     title: "Loudest à la Madison #1 (L'intégral)",
     description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
@@ -14,7 +19,7 @@ const moreBlogPosts = [
     comments: 10,
   },
   {
-    image: "/src/assets/uiii.png",
+    image: uiii,
     category: ['Google', 'Trending', 'New'],
     title: "Loudest à la Madison #1 (L'intégral)",
     description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
@@ -22,7 +27,7 @@ const moreBlogPosts = [
     comments: 10,
   },
   {
-    image: "/src/assets/rng.png",
+    image: rng,
     category: ['Google', 'Trending', 'New'],
     title: "Loudest à la Madison #1 (L'intégral)",
     description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",

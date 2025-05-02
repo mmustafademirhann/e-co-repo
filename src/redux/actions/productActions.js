@@ -17,6 +17,9 @@ export const SET_PRODUCT_LOADING = 'SET_PRODUCT_LOADING';
 export const SET_PRODUCT_ERROR = 'SET_PRODUCT_ERROR';
 export const SET_SELECTED_PRODUCT = 'SET_SELECTED_PRODUCT';
 export const SET_SINGLE_PRODUCT_ERROR = 'SET_SINGLE_PRODUCT_ERROR';
+export const SET_BESTSELLER_PRODUCTS = 'SET_BESTSELLER_PRODUCTS';
+export const SET_BESTSELLER_LOADING = 'SET_BESTSELLER_LOADING';
+export const SET_BESTSELLER_ERROR = 'SET_BESTSELLER_ERROR';
 
 export const FETCH_STATES = {
     NOT_FETCHED: 'NOT_FETCHED',
@@ -99,6 +102,21 @@ export const setProductError = (error) => ({
 export const setSelectedProduct = (product) => ({
     type: SET_SELECTED_PRODUCT,
     payload: product
+});
+
+export const setBestsellerProducts = (products) => ({
+    type: SET_BESTSELLER_PRODUCTS,
+    payload: products
+});
+
+export const setBestsellerLoading = (isLoading) => ({
+    type: SET_BESTSELLER_LOADING,
+    payload: isLoading
+});
+
+export const setBestsellerError = (error) => ({
+    type: SET_BESTSELLER_ERROR,
+    payload: error
 });
 
 // Thunk Action Creator for Categories
@@ -333,3 +351,83 @@ export const clearSingleProductError = () => ({
   type: SET_SINGLE_PRODUCT_ERROR,
   payload: null
 });
+
+// Thunk Action Creator for Bestseller Products
+export const fetchBestsellerProducts = (limit = 4) => async (dispatch) => {
+  console.log('Fetching bestseller products, limit:', limit);
+  
+  // Set loading state
+  dispatch(setBestsellerLoading(true));
+  dispatch(setBestsellerError(null));
+  
+  try {
+    // Fetch products sorted by sell_count or other relevant field to get bestsellers
+    // Assuming the API supports such a sort parameter
+    const url = `/products?sort=sell_count:desc&limit=${limit}`;
+    console.log('fetchBestsellerProducts: Fetching URL:', url);
+    
+    const response = await axiosInstance.get(url);
+    console.log('fetchBestsellerProducts: API Response:', response.data);
+    
+    const { products } = response.data;
+    
+    if (!Array.isArray(products)) {
+      console.error('fetchBestsellerProducts: Invalid products format:', products);
+      throw new Error('Invalid response format: products is not an array');
+    }
+    
+    // Transform products to match the expected format for BestsellerProducts component
+    const transformedProducts = products.map(product => {
+      // Helper function to extract image URL from various possible formats
+      const extractImageUrl = (productData) => {
+        // If product has single image property as string
+        if (productData.image && typeof productData.image === 'string') {
+          return productData.image;
+        }
+        
+        // If product has single image property as object with url
+        if (productData.image && productData.image.url) {
+          return productData.image.url;
+        }
+        
+        // If product has images array
+        if (productData.images && productData.images.length > 0) {
+          const firstImage = productData.images[0];
+          
+          // If first image is string
+          if (typeof firstImage === 'string') {
+            return firstImage;
+          }
+          
+          // If first image is object with url
+          if (firstImage.url) {
+            return firstImage.url;
+          }
+        }
+        
+        // Fallback to placeholder image if nothing found
+        console.warn('No image found for product:', productData.id);
+        return 'https://via.placeholder.com/300';
+      };
+      
+      // Log each product to debug image data
+      console.log('Processing product:', product.id, 'Image data:', product.image, product.images);
+      
+      return {
+        id: product.id,
+        name: product.name || product.title,
+        department: product.category || 'General',
+        price: product.price || 0,
+        image: extractImageUrl(product),
+      };
+    });
+    
+    console.log('Transformed bestseller products:', transformedProducts);
+    dispatch(setBestsellerProducts(transformedProducts));
+  } catch (error) {
+    console.error('Error fetching bestseller products:', error);
+    dispatch(setBestsellerError('Failed to fetch bestseller products'));
+  } finally {
+    dispatch(setBestsellerLoading(false));
+  }
+};

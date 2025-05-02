@@ -156,7 +156,7 @@ const LightNavbar = () => {
     <nav className="bg-white border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold">
-          {user ? user.name : 'Bandage'}
+          E_commerce
         </Link>
         
         <div className="hidden lg:flex flex-1 items-center justify-between ml-8">

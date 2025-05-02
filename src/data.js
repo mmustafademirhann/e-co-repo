@@ -1,18 +1,34 @@
+// Import all image assets
+import kari1 from './assets/kari1.png';
+import sarikiz from './assets/sarikiz.png';
+import sapkali from './assets/sapkali.png';
+import zrgn from './assets/zrgn.png';
+import sin2 from './assets/sin2.png';
+import siyh from './assets/siyh.png';
+import kzn from './assets/kzn.png';
+import cokiyi from './assets/cokiyi.png';
+import etekli from './assets/etekli.png';
+import cncn from './assets/cncn.png';
+import lll from './assets/lll.png';
+import afgn from './assets/afgn.png';
+import uiii from './assets/uiii.png';
+import rng from './assets/rng.png';
+
 export const carouselImages = [
     {
-      src: "/src/assets/kari1.png",
+      src: kari1,
       alt: "Yeni Ürünler",
       caption: "Yeni Koleksiyon",
       description: "2025 için en yeni teknoloji ürünlerimiz"
     },
     {
-      src: "/src/assets/kari1.png",
+      src: kari1,
       alt: "İndirimli Ürünler",
       caption: "Büyük İndirim",
       description: "Seçili ürünlerde %50'ye varan indirimler"
     },
     {
-      src: "/src/assets/kari1.png",
+      src: kari1,
       alt: "Premium Ürünler",
       caption: "Premium Serisi",
       description: "En kaliteli ve lüks ürünlerimiz"
@@ -22,25 +38,25 @@ export const carouselImages = [
     {
       id: 1,
       title: "Kadın",
-      src: "/src/assets/sarikiz.png",
+      src: sarikiz,
       layoutSlot: "women" // Tam olarak "women" mu?
     },
     {
       id: 2,
       title: "Erkek",
-      src: "/src/assets/sapkali.png",
+      src: sapkali,
       layoutSlot: "men" // Tam olarak "men" mu?
     },
     {
       id: 3,
       title: "Çocuk",
-      src: "/src/assets/zrgn.png",
+      src: zrgn,
       layoutSlot: "kids" // Tam olarak "kids" mu?
     },
     {
       id: 4,
       title: "Aksesuar",
-      src: "/src/assets/sin2.png",
+      src: sin2,
       layoutSlot: "accessories" // Tam olarak "accessories" mu?
     }
   ];
@@ -48,34 +64,34 @@ export const carouselImages = [
     {
       id: 1,
       title: "Ürün 1",
-      src:"/src/assets/siyh.png",
+      src: siyh,
       description: "Bu ürün çok şık ve kullanışlı.",
       price: 199.99
     },
     {
       id: 2,
       title: "Ürün 2",
-      src: "/src/assets/kzn.png",
+      src: kzn,
       description: "Kaliteli malzemeden üretilmiştir.",
       price: 249.50
     },
     {
       id: 3,
       title: "Ürün 3",
-      src: "/src/assets/cokiyi.png",
+      src: cokiyi,
       description: "En çok satan modelimiz.",
       price: 179.00
     },
     {
       id: 4,
       title: "Ürün 4",
-      src: "/src/assets/etekli.png",
+      src: etekli,
       description: "Sınırlı stokta, acele edin!",
       price: 299.90
     }
   ];
   export const heroData = {
-    image: "/src/assets/cncn.png",
+    image: cncn,
     season: "SUMMER 2020",
     title: "Part of the Neural Universe",
     description: "We know how large objects will act, but things on a small scale.",
@@ -86,7 +102,7 @@ export const carouselImages = [
 
   export const mockPosts = [
     {
-        image:"/src/assets/lll.png",
+        image: lll,
       category: ['Google', 'Trending', 'New'],
       title: "Loudest à la Madison #1 (L'intégral)",
       description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
@@ -94,7 +110,7 @@ export const carouselImages = [
       comments: 10,
     },
     {
-        image:"/src/assets/cncn.png",
+        image: cncn,
       category: ['Google', 'Trending', 'New'],
       title: "Loudest à la Madison #1 (L'intégral)",
       description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
@@ -102,7 +118,7 @@ export const carouselImages = [
       comments: 10,
     },
     {
-        image:"/src/assets/cncn.png",
+        image: cncn,
       category: ['Google', 'Trending', 'New'],
       title: "Loudest à la Madison #1 (L'intégral)",
       description: "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
@@ -201,31 +217,31 @@ export const carouselImages = [
     {
       id: 1,
       name: "Women",
-      image: "/src/assets/sarikiz.png",
+      image: sarikiz,
       subtext: "Spring Collection"
     },
     {
       id: 2,
       name: "Men",
-      image: "/src/assets/sapkali.png",
+      image: sapkali,
       subtext: "New Arrivals"
     },
     {
       id: 3,
       name: "Kids",
-      image: "/src/assets/zrgn.png",
+      image: zrgn,
       subtext: "Comfortable Styles"
     },
     {
       id: 4,
       name: "Accessories",
-      image: "/src/assets/sin2.png",
+      image: sin2,
       subtext: "New Trends"
     },
     {
       id: 5,
       name: "Sale",
-      image: "/src/assets/kzn.png",
+      image: kzn,
       subtext: "Up to 70% Off"
     }
   ]
